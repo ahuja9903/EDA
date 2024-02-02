@@ -1,0 +1,143 @@
+# Install and load the necessary package
+install.packages("readxl")
+library(readxl)
+library(ggplot2)
+library(plotly)
+
+# Read the data for the global terrorism dataset
+terrorism <- read.csv("E:/path/to/global_terrorism_dataset.csv")  # Replace with the correct file path
+str(terrorism)
+
+# Sentiment distribution bar plot
+ggplot(terrorism, aes(x = Group)) +
+  geom_bar(fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Group Distribution",
+       x = "Group",
+       y = "Count") +
+  theme_minimal()
+
+# Scatter plot of Sentiment Polarity vs Sentiment Subjectivity
+ggplot(terrorism, aes(x = Sentiment_Polarity, y = Sentiment_Subjectivity, color = Group)) +
+  geom_point() +
+  labs(title = "Sentiment Polarity vs Sentiment Subjectivity",
+       x = "Sentiment Polarity",
+       y = "Sentiment Subjectivity",
+       color = "Group")
+
+# Histogram of Sentiment Polarity
+ggplot(terrorism, aes(x = Sentiment_Polarity, fill = Group)) +
+  geom_histogram(binwidth = 0.1, position = "dodge", alpha = 0.7) +
+  labs(title = "Histogram of Sentiment Polarity",
+       x = "Sentiment Polarity",
+       y = "Count") +
+  theme_minimal()
+
+# Line plot of Sentiment Polarity
+ggplot(terrorism, aes(x = seq_along(Sentiment), y = Sentiment_Polarity)) +
+  geom_line() +
+  labs(title = "Line Plot of Sentiment Polarity",
+       x = "Index",
+       y = "Sentiment Polarity") +
+  theme_minimal()
+
+# Box plot of Sentiment Polarity
+ggplot(terrorism, aes(x = 1, y = Sentiment_Polarity, fill = Group)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Box Plot of Sentiment Polarity",
+       x = "",
+       y = "Sentiment Polarity") +
+  theme_minimal()
+
+# Density plot of Sentiment Polarity
+ggplot(terrorism, aes(x = Sentiment_Polarity, fill = Group)) +
+  geom_density(alpha = 0.7) +
+  labs(title = "Density Plot of Sentiment Polarity",
+       x = "Sentiment Polarity",
+       y = "Density",
+       fill = "Group") +
+  theme_minimal()
+
+# Histogram with Density Curve of Sentiment Polarity
+ggplot(terrorism, aes(x = Sentiment_Polarity, fill = Group)) +
+  geom_histogram(binwidth = 0.1, position = "dodge", alpha = 0.7) +
+  geom_density(aes(y = ..count..), alpha = 0.5, color = "red") +
+  labs(title = "Histogram with Density Curve of Sentiment Polarity",
+       x = "Sentiment Polarity",
+       y = "Count") +
+  theme_minimal()
+
+# Create a density plot for each group of Sentiment
+ggplot(terrorism, aes(x = Sentiment_Polarity, fill = Group)) +
+  geom_density(alpha = 0.7) +
+  labs(title = "Density Plots of Sentiment Polarity by Group",
+       x = "Sentiment Polarity",
+       y = "Density") +
+  theme_minimal() +
+  facet_wrap(~Group, scales = "free_y")
+
+# Create a frequency polygon for Sentiment_Polarity
+ggplot(terrorism, aes(x = Sentiment_Polarity)) +
+  geom_freqpoly(binwidth = 0.1, color = "blue", fill = "skyblue", alpha = 0.7) +
+  labs(title = "Frequency Polygon of Sentiment Polarity",
+       x = "Sentiment Polarity",
+       y = "Frequency") +
+  theme_minimal()
+
+# Create a box plot with notches for Sentiment Polarity
+ggplot(terrorism, aes(x = Group, y = Sentiment_Polarity, fill = Group)) +
+  geom_boxplot(notch = TRUE, alpha = 0.7) +
+  labs(title = "Box Plot with Notches for Sentiment Polarity",
+       x = "Group",
+       y = "Sentiment Polarity") +
+  theme_minimal()
+
+# Create multiple dot plots for Sentiment Polarity grouped by Group
+ggplot(terrorism, aes(x = Group, y = Sentiment_Polarity, fill = Group)) +
+  geom_dotplot(binaxis = 'y', stackdir = 'center', position = 'dodge', dotsize = 0.5, alpha = 0.7) +
+  labs(title = "Multiple Dot Plots for Sentiment Polarity",
+       x = "Group",
+       y = "Sentiment Polarity") +
+  theme_minimal()
+
+# Create a density plot of Sentiment Polarity and Sentiment Subjectivity
+ggplot(terrorism, aes(x = Sentiment_Polarity, y = Sentiment_Subjectivity)) +
+  geom_density_2d(fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Density Plot of Sentiment Polarity and Subjectivity",
+       x = "Sentiment Polarity",
+       y = "Sentiment Subjectivity") +
+  theme_minimal()
+
+# Create histograms with new facet labels
+ggplot(terrorism, aes(x = Sentiment_Polarity, fill = Group)) +
+  geom_histogram(binwidth = 0.1, position = "dodge", alpha = 0.7) +
+  labs(title = "Histograms of Sentiment Polarity",
+       x = "Sentiment Polarity",
+       y = "Count") +
+  theme_minimal() +
+  facet_grid(Group ~ ., scales = "free_y", labeller = as_labeller(c(Group1 = "Group1", Group2 = "Group2", Group3 = "Group3")))
+
+# Create a Violin Plot
+ggplot(terrorism, aes(x = Group, y = Sentiment_Polarity, fill = Group)) +
+  geom_violin(trim = FALSE, alpha = 0.7) +
+  labs(title = "Violin Plot of Sentiment Polarity",
+       x = "Group",
+       y = "Sentiment Polarity") +
+  theme_minimal()
+
+# Calculate the correlation matrix
+cor_matrix_terrorism <- cor(select(terrorism, Sentiment_Polarity, Sentiment_Subjectivity))
+
+# Convert the correlation matrix to a long format
+cor_long_terrorism <- reshape2::melt(cor_matrix_terrorism)
+
+# Create a correlation heatmap
+ggplot(data = cor_long_terrorism, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "red", high = "green") +
+  labs(title = "Correlation Matrix",
+       x = "Variables",
+       y = "Variables") +
+  theme_minimal()
+
+# Create a 3D scatter plot
+plot_ly(terrorism, x = ~Sentiment
